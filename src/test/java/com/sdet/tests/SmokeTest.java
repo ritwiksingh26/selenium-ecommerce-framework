@@ -13,3 +13,4 @@ public class SmokeTest extends BaseTest {
         Assert.assertTrue(title.contains("Automation Exercise"), "Home page title mismatch. Got " + title);
     }
 }
+
