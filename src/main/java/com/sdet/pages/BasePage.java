@@ -48,4 +48,13 @@ public class BasePage {
             return false;
         }
     }
+
+    protected boolean isDisplayed(WebElement element){
+        try {
+            wait.until(ExpectedConditions.visibilityOf(element));
+            return element.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
