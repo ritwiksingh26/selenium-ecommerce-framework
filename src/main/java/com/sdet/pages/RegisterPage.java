@@ -111,6 +111,4 @@ public class RegisterPage extends BasePage{
         clickCreateAccount();
     }
 
-
-
 }

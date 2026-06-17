@@ -51,4 +51,26 @@ public class LoginPage extends BasePage{
         return isDisplayed(invalidLoginError);
     }
 
+    public void enterSignupName(String name){
+        type(signupNameField, name);
+    }
+
+    public void enterSignupEmail(String email){
+        type(signupEmailField, email);
+    }
+
+    public void clickSignupBtn(){
+        click(signupBtn);
+    }
+
+    public void fillSignupForm(String name, String email){
+        enterSignupName(name);
+        enterSignupEmail(email);
+        clickSignupBtn();
+    }
+
+    public boolean isDuplicateEmailErrorDisplayed(){
+        return isDisplayed(duplicateEmailError);
+    }
+
 }
