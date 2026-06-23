@@ -4,6 +4,11 @@
     <test name="Smoke Tests">
         <classes>
             <class name="com.sdet.tests.SmokeTest"/>
+            <class name="com.sdet.tests.LoginTest">
+                    <methods>
+                            <include name="testValidLogin"/>
+                    </methods>
+            </class>
         </classes>
     </test>
 </suite>
