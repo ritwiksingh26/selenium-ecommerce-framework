@@ -1,0 +1,12 @@
+[
+  {
+    "testCaseId": "TC-07",
+    "searchTerm": "Top",
+    "expectedResult": "found"
+  },
+  {
+    "testCaseId": "TC-08",
+    "searchTerm": "zzzzzzznonexistentproductzzzzzzz",
+    "expectedResult": "not_found"
+  }
+]
