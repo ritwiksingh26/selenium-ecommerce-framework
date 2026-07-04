@@ -9,14 +9,17 @@ public class ConfigReader {
 
     static {
         try {
+
+            String env = System.getProperty("env", "dev"); //default = dev
+            String fileName = "config/" + env + ".properties";
             properties = new Properties();
 
             //using classpath to load config.properties
-            InputStream is = ConfigReader.class.getClassLoader().getResourceAsStream("config/config.properties");
-            if (is == null) throw new RuntimeException("config.properties not found in classpath");
+            InputStream is = ConfigReader.class.getClassLoader().getResourceAsStream(fileName);
+            if (is == null) throw new RuntimeException(fileName + "not found");
             properties.load(is);
         } catch (IOException e) {
-            throw new RuntimeException("failed to load config.properties" + e);
+            throw new RuntimeException("failed to load properties file" + e);
         }
     }
 
