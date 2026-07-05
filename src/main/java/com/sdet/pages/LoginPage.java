@@ -1,5 +1,6 @@
 package com.sdet.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -71,6 +72,10 @@ public class LoginPage extends BasePage{
 
     public boolean isDuplicateEmailErrorDisplayed(){
         return isDisplayed(duplicateEmailError);
+    }
+
+    public boolean isMandatoryFieldValidationTriggered(By locator){
+        return isElementPresent(locator);
     }
 
 }
