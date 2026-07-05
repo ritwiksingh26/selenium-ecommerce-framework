@@ -3,6 +3,7 @@
 <suite name="Regression Suite" verbose="1">
     <listeners>
             <listener class-name="com.sdet.listeners.TestListeners"/>
+            <listener class-name="com.sdet.listeners.RetryListener"/>
     </listeners>
     <test name="Auth Module">
         <classes>
