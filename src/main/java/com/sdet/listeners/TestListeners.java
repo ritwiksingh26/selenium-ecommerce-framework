@@ -20,6 +20,16 @@ public class TestListeners implements ITestListener {
     private static ExtentReports extent;
     private static final Map<String, ExtentTest> testMap = new HashMap<>();
 
+
+    //Builds a unique key that works for both regular and data-driven tests
+    private String getTestKey(ITestResult result){
+        String methodName = result.getMethod().getMethodName();
+        Object[] params = result.getParameters();
+        if (params != null && params.length > 0){
+            return methodName + "_" + result.getMethod().getCurrentInvocationCount();
+        }
+        return methodName;
+    }
     @Override
     public void onStart(ITestContext context) {
         extent = ExtentManager.getInstance();
@@ -28,36 +38,54 @@ public class TestListeners implements ITestListener {
 
     @Override
     public void onTestStart(ITestResult result){
-        String testName = result.getMethod().getMethodName();
-        ExtentTest extentTest = extent.createTest(testName, result.getMethod().getDescription());
-        testMap.put(testName, extentTest);
-        log.info("Test started: {}", testName);
+        String testKey = getTestKey(result);
+
+        // For data-driven tests, append parameter summary to the display name
+        String displayName = result.getMethod().getMethodName();
+        Object[] params = result.getParameters();
+        if (params != null && params.length > 0){
+            displayName += " " + java.util.Arrays.toString(params);
+        }
+        ExtentTest extentTest = extent.createTest(displayName, result.getMethod().getDescription());
+        testMap.put(testKey, extentTest);
+        log.info("Test started: {}", testKey);
     }
 
     @Override
     public void onTestSuccess(ITestResult result){
-        String testName = result.getMethod().getMethodName();
-        testMap.get(testName).log(Status.PASS, "Test passed");
-        log.info("Test PASSED: {}", testName);
+        String testKey = getTestKey(result);
+        ExtentTest extentTest = testMap.get(testKey);
+        if (extentTest != null){
+            extentTest.log(Status.PASS, "Test passed");
+        }
+        log.info("Test PASSED: {}", testKey);
     }
 
     @Override
     public void onTestFailure(ITestResult result){
-        String testName = result.getMethod().getMethodName();
-        ExtentTest extentTest = testMap.get(testName);
-         extentTest.log(Status.FAIL, "Test failed: " + result.getThrowable());
-         log.error("Test FAILED: {} - Reason {}", testName, result.getThrowable().getMessage());
+        String testKey = getTestKey(result);
+        ExtentTest extentTest = testMap.get(testKey);
 
-         String screenshotPath = ScreenshotUtil.captureScreenshot(testName);
-         extentTest.addScreenCaptureFromPath("../screenshots/" +
-                 screenshotPath.substring(screenshotPath.lastIndexOf("/") + 1));
+        if (extentTest != null){
+            extentTest.log(Status.FAIL, "Test failed: " + result.getThrowable());
+            String screenshotPath = ScreenshotUtil.captureScreenshot(result.getMethod().getMethodName());
+            extentTest.addScreenCaptureFromPath("../screenshots/" +
+                    screenshotPath.substring(screenshotPath.lastIndexOf("/") + 1));
+
+            log.error("Test FAILED: {} - Reason {}", testKey, result.getThrowable().getMessage());
+        } else {
+            log.error("ExtentTest instance not found for key: {} - screenshot skipped", testKey);
+        }
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        String testName = result.getMethod().getMethodName();
-        testMap.get(testName).log(Status.SKIP, "Test skipped");
-        log.warn("Test SKIPPED: {}", testName);
+        String testKey = getTestKey(result);
+        ExtentTest extentTest = testMap.get(testKey);
+        if (extentTest != null){
+            extentTest.log(Status.SKIP, "Test skipped");
+        }
+        log.warn("Test SKIPPED: {}", testKey);
     }
 
     @Override
