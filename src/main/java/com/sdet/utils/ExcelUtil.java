@@ -21,12 +21,18 @@ public class ExcelUtil {
              Workbook workbook = new XSSFWorkbook(fis)){
 
             Sheet sheet = workbook.getSheet(sheetName);
+            if (sheet == null){
+                throw new RuntimeException("Sheet '" + sheetName + "' not found in: " + filePath);
+            }
             Row headerRow = sheet.getRow(0);
             int columnCount = headerRow.getLastCellNum();
 
             for (int i = 1; i <= sheet.getLastRowNum(); i++){
                 Row row = sheet.getRow(i);
                 if (row == null) continue;
+
+                String firstCellValue = getCellValue(row.getCell(0));
+                if (firstCellValue.isEmpty()) continue;
 
                 Map<String, String> rowData = new HashMap<>();
                 for (int j = 0; j < columnCount; j++){
