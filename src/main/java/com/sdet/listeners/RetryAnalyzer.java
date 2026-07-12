@@ -18,6 +18,7 @@ public class RetryAnalyzer implements IRetryAnalyzer {
             log.warn("Retrying test '{}' - attempt {} of {}", result.getName(), retryCount, MAX_RETRY_COUNT);
             return true;
         }
+        log.error("x '{}' failed after {} retries - marking as FAILED", result.getName(), MAX_RETRY_COUNT);
         return false;
     }
 }
