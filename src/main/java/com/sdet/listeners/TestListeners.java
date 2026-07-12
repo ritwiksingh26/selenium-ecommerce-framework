@@ -10,15 +10,17 @@ import org.apache.logging.log4j.Logger;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
+import org.testng.annotations.Test;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TestListeners implements ITestListener {
 
     private static final Logger log = LogUtil.getLogger(TestListeners.class);
     private static ExtentReports extent;
-    private static final Map<String, ExtentTest> testMap = new HashMap<>();
+    private static final Map<String, ExtentTest> testMap = new ConcurrentHashMap<>();
 
 
     //Builds a unique key that works for both regular and data-driven tests
@@ -32,7 +34,9 @@ public class TestListeners implements ITestListener {
     }
     @Override
     public void onStart(ITestContext context) {
-        extent = ExtentManager.getInstance();
+        synchronized (TestListeners.class){
+            extent = ExtentManager.getInstance();
+        }
         log.info("==== Test Suite Started: {} ====", context.getName());
     }
 
