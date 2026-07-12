@@ -68,10 +68,15 @@ public class TestListeners implements ITestListener {
 
         if (extentTest != null){
             extentTest.log(Status.FAIL, "Test failed: " + result.getThrowable());
-            String screenshotPath = ScreenshotUtil.captureScreenshot(result.getMethod().getMethodName());
-            extentTest.addScreenCaptureFromPath("../screenshots/" +
-                    screenshotPath.substring(screenshotPath.lastIndexOf("/") + 1));
 
+            try {
+                String screenshotPath = ScreenshotUtil.captureScreenshot(result.getMethod().getMethodName());
+                extentTest.addScreenCaptureFromPath("../screenshots/" +
+                        screenshotPath.substring(screenshotPath.lastIndexOf("/") + 1));
+                log.info("Screenshot captured: {}", screenshotPath);
+            } catch (Exception e){
+                log.error("Screenshot capture failed: {}", e.getMessage(), e);
+            }
             log.error("Test FAILED: {} - Reason {}", testKey, result.getThrowable().getMessage());
         } else {
             log.error("ExtentTest instance not found for key: {} - screenshot skipped", testKey);
