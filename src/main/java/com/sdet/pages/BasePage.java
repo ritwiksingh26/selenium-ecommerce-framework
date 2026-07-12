@@ -1,9 +1,9 @@
 package com.sdet.pages;
 
 import com.sdet.base.DriverManager;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import com.sdet.utils.LogUtil;
+import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -13,6 +13,7 @@ public class BasePage {
 
     protected WebDriver driver;
     protected WebDriverWait wait;
+    private static final Logger log = LogUtil.getLogger(BasePage.class);
 
     public BasePage() {
         this.driver = DriverManager.getDriver();
@@ -22,13 +23,16 @@ public class BasePage {
 
     protected void click(WebElement element){
         wait.until(ExpectedConditions.elementToBeClickable(element));
+        ((JavascriptExecutor) driver).executeScript("arguements[0].scrollIntoView(true);", element);
         element.click();
+        log.debug("Clicked element: {}", element);
     }
 
     protected void type(WebElement element, String text){
         wait.until(ExpectedConditions.visibilityOf(element));
         element.clear();
         element.sendKeys(text);
+        log.debug("Typed into element");
     }
 
     protected String getText(WebElement element){
@@ -44,7 +48,7 @@ public class BasePage {
         try{
             driver.findElement(locator);
             return true;
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             return false;
         }
     }
@@ -53,7 +57,7 @@ public class BasePage {
         try {
             wait.until(ExpectedConditions.visibilityOf(element));
             return element.isDisplayed();
-        } catch (Exception e) {
+        } catch (TimeoutException | NoSuchElementException e) {
             return false;
         }
     }
