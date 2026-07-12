@@ -48,6 +48,7 @@ public class DriverManager {
         getDriver().manage().timeouts()
                 .pageLoadTimeout(Duration.ofSeconds(ConfigReader.getInt("pageLoadTimeout")));
         getDriver().get(ConfigReader.get("baseUrl"));
+        log.info("Browser launched and navigated to: {}", ConfigReader.get("baseUrl"));
 
     }
 
