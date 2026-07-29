@@ -8,7 +8,7 @@ public class BookingResponse {
     private int bookingid;
 
     @JsonProperty("booking")
-    private int booking;
+    private Booking booking;
 
     public int getBookingid(){
         return bookingid;
@@ -18,11 +18,11 @@ public class BookingResponse {
         this.bookingid = bookingid;
     }
 
-    public int getBooking(){
+    public Booking getBooking(){
         return booking;
     }
 
-    public void setBooking(int booking){
+    public void setBooking(Booking booking){
         this.booking = booking;
     }
 }
