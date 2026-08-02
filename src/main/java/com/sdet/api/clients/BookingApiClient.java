@@ -134,7 +134,7 @@ public class BookingApiClient {
                 .when()
                 .delete("/booking/" + bookingId)
                 .then()
-                .statusCode(200)
+                .statusCode(201)
                 .extract().response();
     }
 }

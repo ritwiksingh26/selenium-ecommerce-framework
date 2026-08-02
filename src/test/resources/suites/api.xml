@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Regression Suite" verbose="1">
+<suite name="API Test Suite" verbose="1">
     <listeners>
-            <listener class-name="com.sdet.listeners.TestListeners"/>
-            <listener class-name="com.sdet.listeners.RetryListener"/>
+        <listener class-name="com.sdet.listeners.TestListeners"/>
+        <listener class-name="com.sdet.listeners.RetryListener"/>
     </listeners>
-
-    <test name="Auth Module - UI">
-        <classes>
-            <class name="com.sdet.tests.LoginTest"/>
-            <class name="com.sdet.tests.RegisterTest"/>
-        </classes>
-    </test>
 
     <test name="Auth API Tests">
         <classes>
