@@ -24,7 +24,7 @@ public class TestListeners implements ITestListener {
 
 
     //Builds a unique key that works for both regular and data-driven tests
-    private String getTestKey(ITestResult result){
+    private static String getTestKey(ITestResult result){
         String methodName = result.getMethod().getMethodName();
         Object[] params = result.getParameters();
         if (params != null && params.length > 0){
@@ -72,16 +72,6 @@ public class TestListeners implements ITestListener {
 
         if (extentTest != null){
             extentTest.log(Status.FAIL, "Test failed: " + result.getThrowable());
-
-            try {
-                String screenshotPath = ScreenshotUtil.captureScreenshot(result.getMethod().getMethodName());
-                extentTest.addScreenCaptureFromPath("../screenshots/" +
-                        screenshotPath.substring(screenshotPath.lastIndexOf("/") + 1));
-                log.info("Screenshot captured: {}", screenshotPath);
-            } catch (Exception e){
-                log.error("Screenshot capture failed: {}", e.getMessage(), e);
-            }
-            log.error("Test FAILED: {} - Reason {}", testKey, result.getThrowable().getMessage());
         } else {
             log.error("ExtentTest instance not found for key: {} - screenshot skipped", testKey);
         }
@@ -102,4 +92,26 @@ public class TestListeners implements ITestListener {
         extent.flush();
         log.info("==== Test Suite Finished: {} ====", context.getName());
     }
+
+    public static void attachScreenshot(ITestResult result, String screenshotPath){
+        if (screenshotPath == null || screenshotPath.isEmpty()) {
+            log.warn("Screenshot path empty - skipping attachment");
+            return;
+        }
+
+        String testKey = getTestKey(result);
+        ExtentTest extentTest = testMap.get(testKey);
+
+        if (extentTest != null) {
+            try{
+                extentTest.addScreenCaptureFromPath("../screenshots/" + screenshotPath.substring(screenshotPath.lastIndexOf("/") + 1));
+                extentTest.log(Status.FAIL, "Screenshot captured on failure");
+            log.info("Screenshot attached for: {}", testKey);
+            } catch (Exception e) {
+                log.error("Failed to attach screenshot for: {} — {}", testKey, e.getMessage());
+            }
+        } else {
+            log.warn("ExtentTest not found for key: {} — screenshot not attached", testKey);
+        }
+    }   
 }
