@@ -82,6 +82,13 @@
           <artifactId>json-schema-validator</artifactId>
           <version>5.5.6</version>
       </dependency>
+
+      <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-testng</artifactId>
+            <version>2.27.0</version>
+      </dependency>   
+
   </dependencies>
 
   <!-- Project level build — default suite runs smoke -->
@@ -110,8 +117,31 @@
                       <browser>${browser}</browser>
                       <env>${env}</env>
                       <log4j2.configurationFile>log4j2.xml</log4j2.configurationFile>
+                      <!-- Allure results directory -->
+                        <allure.results.directory>
+                            ${project.build.directory}/allure-results
+                        </allure.results.directory>
                   </systemPropertyVariables>
+                  <!-- Register Allure listener -->
+                    <properties>
+                        <property>
+                            <name>listener</name>
+                            <value>io.qameta.allure.testng.AllureTestNg</value>
+                        </property>
+                    </properties>
               </configuration>
+          </plugin>
+
+          <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>2.12.0</version>
+                <configuration>
+                    <reportVersion>2.27.0</reportVersion>
+                    <resultsDirectory>
+                        ${project.build.directory}/allure-results
+                    </resultsDirectory>
+                </configuration>
           </plugin>
       </plugins>
   </build>

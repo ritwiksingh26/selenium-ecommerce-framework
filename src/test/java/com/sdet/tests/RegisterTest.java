@@ -17,7 +17,10 @@ import java.util.List;
 import java.util.Map;
 
 import static org.openqa.selenium.By.cssSelector;
+import io.qameta.allure.*;
 
+@Epic("Authentication")
+@Feature("Registration")
 public class RegisterTest extends BaseTest {
 
     private static final Logger log = LogUtil.getLogger(RegisterTest.class);
@@ -44,6 +47,8 @@ public class RegisterTest extends BaseTest {
         return data;
     }
 
+    @Story("Data Driven Registration")
+    @Severity(SeverityLevel.CRITICAL)
     @Test(dataProvider = "registrationData",
     description = "Data-driven registration scenarios from Excel")
     public void registrationScenarios(Map<String, String> data){
@@ -76,6 +81,8 @@ public class RegisterTest extends BaseTest {
     }
 
     //TC-01: Valid Registration
+    @Story("Valid Registration")
+    @Severity(SeverityLevel.CRITICAL)
     @Test(description = "TC-01: New user should be able to register successfully")
     public void validRegistration(){
         homePage.goToLoginPage();
@@ -91,6 +98,8 @@ public class RegisterTest extends BaseTest {
     }
 
     //TC-02: Duplicate Email Registration
+    @Story("Duplicate Email Registration")
+    @Severity(SeverityLevel.CRITICAL)
     @Test(description = "TC-02: Existing email should show duplicate error")
     public void testDuplicateEmailRegistration(){
         homePage.goToLoginPage();

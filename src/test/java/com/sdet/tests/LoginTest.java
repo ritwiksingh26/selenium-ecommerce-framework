@@ -7,7 +7,11 @@ import com.sdet.pages.LoginPage;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import io.qameta.allure.*;
 
+
+@Epic("Authentication")
+@Feature("Login")
 public class LoginTest extends BaseTest {
 
     private HomePage homePage;
@@ -22,6 +26,9 @@ public class LoginTest extends BaseTest {
     }
 
     //TC-04: Valid login
+    @Story("Valid Login")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("Verify that a registered user can log in with valid credentials")
     @Test(description = "TC-04: Valid credentials should log user in")
     public void testValidLogin(){
         homePage.goToLoginPage();
@@ -30,6 +37,9 @@ public class LoginTest extends BaseTest {
     }
 
     //TC-05: Invalid login
+    @Story("Invalid Login")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Verify that invalid credentials show an error message")
     @Test(description = "TC-05: Invalid credentials should show error")
     public void testInvalidLogin(){
         homePage.goToLoginPage();
@@ -38,6 +48,9 @@ public class LoginTest extends BaseTest {
     }
 
     //TC-06: Logout
+    @Story("Logout")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Verify that a logged-in user can log out successfully")
     @Test(description = "TC-06: Logged-in user should be able to logout",
     dependsOnMethods = "testValidLogin")
     public void testLogout(){

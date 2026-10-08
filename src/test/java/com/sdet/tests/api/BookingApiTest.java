@@ -10,12 +10,17 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.awt.print.Book;
+import io.qameta.allure.*;
 
+@Epic("API Testing")
+@Feature("Booking API")
 public class BookingApiTest extends ApiBaseTest{
 
     private static int createdBookingId;
 
     // TC-API-03: Create booking and validate schema
+    @Story("Create Booking")
+    @Severity(SeverityLevel.CRITICAL)
     @Test(description = "TC-API-03: Create booking and validate schema", priority = 1)
     public void testCreateBooking(){
         Booking booking = buildDefaultBooking();
@@ -29,6 +34,8 @@ public class BookingApiTest extends ApiBaseTest{
     }
 
     // TC-API-04: Get booking by ID
+    @Story("Get Booking by ID")
+    @Severity(SeverityLevel.CRITICAL)
     @Test(description = "TC-API-04: Get booking should return correct data", priority = 2,
             dependsOnMethods = "testCreateBooking")
     public void testGetBookingById(){
@@ -44,6 +51,8 @@ public class BookingApiTest extends ApiBaseTest{
     }
 
     // TC-API-05: Full update booking
+    @Story("Full update Booking")
+    @Severity(SeverityLevel.CRITICAL)
     @Test(description = "TC-API-05: PUT should fully update booking", priority = 3,
             dependsOnMethods = "testCreateBooking")
     public void testFullyUpdateBooking(){
@@ -58,6 +67,8 @@ public class BookingApiTest extends ApiBaseTest{
     }
 
     // TC-API-06: Partial update booking
+    @Story("Partial update Booking")
+    @Severity(SeverityLevel.CRITICAL)
     @Test(description = "TC-API-06: PATCH should partailly update booking", priority = 4,
             dependsOnMethods = "testCreateBooking")
     public void testPartailUpdateBooking(){
@@ -68,6 +79,8 @@ public class BookingApiTest extends ApiBaseTest{
     }
 
     // TC-API-07: Delete booking
+    @Story("Delete Booking")
+    @Severity(SeverityLevel.CRITICAL)
     @Test(description = "TC-API-07: DELETE should remove booking", priority = 5, dependsOnMethods = "testCreateBooking")
     public void testDeleteBooking(){
         Response response = bookingClient.deleteBooking(createdBookingId);
@@ -75,6 +88,8 @@ public class BookingApiTest extends ApiBaseTest{
     }
 
     // TC-API-08: Filter bookings by name
+    @Story("Filter Booking by name")
+    @Severity(SeverityLevel.CRITICAL)
     @Test(description = "TC-API-08: Filter bookings by first and last name", priority = 1)
     public void testGetBookingsByName(){
         bookingClient.createBooking(buildDefaultBooking());
