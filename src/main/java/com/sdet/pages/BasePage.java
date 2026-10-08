@@ -23,7 +23,7 @@ public class BasePage {
 
     protected void click(WebElement element){
         wait.until(ExpectedConditions.elementToBeClickable(element));
-        ((JavascriptExecutor) driver).executeScript("arguements[0].scrollIntoView(true);", element);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
         element.click();
         log.debug("Clicked element: {}", element);
     }

@@ -19,7 +19,7 @@ public class BrowserFactory {
     private static final Logger log = LogUtil.getLogger(BrowserFactory.class);
 
     public static WebDriver createDriver(String browser){
-        boolean headless = Boolean.parseBoolean(ConfigReader.get("headless"));
+        boolean headless = Boolean.parseBoolean(System.getProperty("headless", ConfigReader.get("headless")));
         log.info("Creating browser: {} | headless: {}", browser, headless);
 
         return switch (browser.toLowerCase().trim()){
