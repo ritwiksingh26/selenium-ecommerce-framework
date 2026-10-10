@@ -18,9 +18,11 @@ public class BaseTest {
 
     @Parameters({"browser"})
     @BeforeMethod
-    public void setUp(@Optional("chrome") String browser){
+    public void setUp(@Optional("") String browser){
         // Override config browser with suite XML parameter
-        System.setProperty("browser", browser);
+        if (!browser.isBlank()) {
+            System.setProperty("browser", browser);
+        }
         DriverManager.initDriver();
         log.info("Browser launched: {}", browser);
     }

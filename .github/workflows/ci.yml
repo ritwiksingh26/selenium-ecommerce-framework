@@ -6,7 +6,12 @@ on:
 
 jobs:
   run-tests:
+    name: Smoke - ${{ matrix.browser }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [ chrome, firefox ]
 
     steps:
       - name: Checkout code
@@ -17,6 +22,7 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+          cache: maven
 
       - name: Run Smoke Tests
-        run: mvn test -Psmoke -Dheadless=true
+        run: mvn test -Psmoke -Dbrowser=${{ matrix.browser }} -Dheadless=true
