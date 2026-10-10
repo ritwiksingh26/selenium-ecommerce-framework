@@ -32,6 +32,7 @@ public class BaseTest {
         if (result.getStatus() == ITestResult.FAILURE) {
             String screenshotPath = ScreenshotUtil.captureScreenshot(result.getMethod().getMethodName());
             TestListeners.attachScreenshot(result, screenshotPath);
+            ScreenshotUtil.attachToAllure(DriverManager.getDriver());
             log.info("Failure screenshot saved: {}", screenshotPath);
         }
         DriverManager.quitDriver();

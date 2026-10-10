@@ -15,6 +15,9 @@
       <maven.compiler.target>21</maven.compiler.target>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+      <aspectj.version>1.9.22</aspectj.version>
+      <allure.version>2.27.0</allure.version>
+
       <env>dev</env>
       <browser>chrome</browser>
   </properties>
@@ -89,9 +92,14 @@
       <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-testng</artifactId>
-            <version>2.27.0</version>
-      </dependency>   
-
+            <version>${allure.version}</version>
+      </dependency>
+      
+      <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
+      </dependency>
   </dependencies>
 
   <!-- Project level build — default suite runs smoke -->
@@ -117,6 +125,9 @@
               <artifactId>maven-surefire-plugin</artifactId>
               <version>3.2.5</version>
               <configuration>
+                <argLine>
+                    -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                </argLine>
                   <suiteXmlFiles>
                       <suiteXmlFile>
                           src/test/resources/suites/smoke.xml

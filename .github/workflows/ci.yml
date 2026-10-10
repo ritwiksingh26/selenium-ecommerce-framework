@@ -5,6 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
+
   run-tests:
     name: Smoke - ${{ matrix.browser }}
     runs-on: ubuntu-latest
@@ -12,6 +13,8 @@ jobs:
       fail-fast: false
       matrix:
         browser: [ chrome, firefox ]
+
+  
 
     steps:
       - name: Checkout code
@@ -26,3 +29,39 @@ jobs:
 
       - name: Run Smoke Tests
         run: mvn test -Psmoke -Dbrowser=${{ matrix.browser }} -Dheadless=true
+
+      - name: Upload Allure Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-results-${{ matrix.browser }}
+          path: target/allure-results
+          if-no-files-found: warn
+
+  allure-report:
+    name: Generate Allure Report
+    runs-on: ubuntu-latest
+    needs: run-tests
+    if: always()
+    steps:
+      - name: Download all Allure results
+        uses: actions/download-artifact@v4
+        with:
+          pattern: allure-results-*
+          merge-multiple: true
+          path: allure-results
+
+      - name: Build Allure report
+        uses: simple-elf/allure-report-action@master
+        with:
+          allure_results: allure-results
+          allure_report: allure-report
+
+      - name: Upload Allure report
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-html-report
+          path: allure-report
+    
+
+  
