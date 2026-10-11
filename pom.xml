@@ -18,6 +18,10 @@
       <aspectj.version>1.9.22</aspectj.version>
       <allure.version>2.27.0</allure.version>
 
+      <sonar.organization>YOUR_ORG_KEY</sonar.organization>
+      <sonar.projectKey>YOUR_PROJECT_KEY</sonar.projectKey>
+      <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+
       <env>dev</env>
       <browser>chrome</browser>
   </properties>
