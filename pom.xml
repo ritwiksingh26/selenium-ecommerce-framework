@@ -19,7 +19,7 @@
       <allure.version>2.27.0</allure.version>
 
       <sonar.organization>ritwiksingh26</sonar.organization>
-      <sonar.projectKey>ritwiksingh26</sonar.projectKey>
+      <sonar.projectKey>ritwiksingh26_selenium-ecommerce-framework</sonar.projectKey>
       <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
       <env>dev</env>
