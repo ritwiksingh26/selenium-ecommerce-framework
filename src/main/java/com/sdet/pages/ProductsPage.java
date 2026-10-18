@@ -3,6 +3,7 @@ package com.sdet.pages;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -40,9 +41,17 @@ public class ProductsPage extends BasePage{
     // //a[contains(text(),'View Product')]
 
     public void openProductDetails(int index){
-        click(driver.findElements(VIEW_PRODUCT_LINKS).get(index));
-        waitForUrl("product_details");
-    }
+        WebElement link = driver.findElements(VIEW_PRODUCT_LINKS).get(index);
+        String href = link.getAttribute("href");
 
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", link);
+
+        try {
+            waitForUrl("product_details");
+        } catch (org.openqa.selenium.TimeoutException e) {
+            driver.get(href);
+            waitForUrl("product_details");
+        }
+    }
 
 }

@@ -36,6 +36,10 @@ public class BrowserFactory {
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--disable-gpu");
         options.addArguments("--window-size=1920,1080");
+        options.addArguments("--host-rules=MAP *.googlesyndication.com 127.0.0.1, "
+        + "MAP *.doubleclick.net 127.0.0.1, "
+        + "MAP *.googleadservices.com 127.0.0.1, "
+        + "MAP *.adservice.google.com 127.0.0.1");
         if (headless) options.addArguments("--headless=new");
         return new ChromeDriver(options);
     }
@@ -55,6 +59,10 @@ public class BrowserFactory {
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--window-size=1920,1080");
+        options.addArguments("--host-rules=MAP *.googlesyndication.com 127.0.0.1, "
+        + "MAP *.doubleclick.net 127.0.0.1, "
+        + "MAP *.googleadservices.com 127.0.0.1, "
+        + "MAP *.adservice.google.com 127.0.0.1");
         if (headless) options.addArguments("--headless=new");
         return new EdgeDriver(options);
     }
