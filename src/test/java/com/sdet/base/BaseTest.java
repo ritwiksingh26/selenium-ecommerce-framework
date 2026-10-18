@@ -7,7 +7,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
-import com.beust.jcommander.Parameter;
 import com.sdet.listeners.TestListeners;
 import com.sdet.utils.LogUtil;
 import com.sdet.utils.ScreenshotUtil;
@@ -17,7 +16,7 @@ public class BaseTest {
     private static final Logger log = LogUtil.getLogger(BaseTest.class);
 
     @Parameters({"browser"})
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void setUp(@Optional("") String browser){
         // Override config browser with suite XML parameter
         if (!browser.isBlank()) {
@@ -27,7 +26,7 @@ public class BaseTest {
         log.info("Browser launched: {}", browser);
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void tearDown(ITestResult result) {
         if (result.getStatus() == ITestResult.FAILURE) {
             String screenshotPath = ScreenshotUtil.captureScreenshot(result.getMethod().getMethodName());

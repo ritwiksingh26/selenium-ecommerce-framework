@@ -1,7 +1,6 @@
 package com.sdet.tests;
 
 import com.sdet.base.BaseTest;
-import com.sdet.components.NavBarComponent;
 import com.sdet.pages.HomePage;
 import com.sdet.pages.LoginPage;
 import com.sdet.pages.RegisterPage;

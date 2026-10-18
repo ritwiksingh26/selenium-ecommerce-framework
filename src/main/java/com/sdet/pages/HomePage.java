@@ -26,4 +26,9 @@ public class HomePage extends BasePage{
         navBar.clickSignupLogin();
         waitForUrl("login");
     }
+
+    public void goToProductPage(){
+        navBar.clickProducts();
+        waitForUrl("products");
+    }
 }

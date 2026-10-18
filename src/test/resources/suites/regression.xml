@@ -6,22 +6,14 @@
             <listener class-name="com.sdet.listeners.RetryListener"/>
     </listeners>
 
-    <test name="Auth Module - UI">
-        <classes>
-            <class name="com.sdet.tests.LoginTest"/>
-            <class name="com.sdet.tests.RegisterTest"/>
-        </classes>
-    </test>
-
-    <test name="Auth API Tests">
-        <classes>
-            <class name="com.sdet.tests.api.AuthApiTest"/>
-        </classes>
-    </test>
-
-    <test name="Booking API Tests">
-        <classes>
-            <class name="com.sdet.tests.api.BookingApiTest"/>
-        </classes>
+    <test name="Regression">
+        <groups>
+            <run>
+                <include name="regression"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="com.sdet.tests.*"/>
+        </packages>
     </test>
 </suite>

@@ -5,11 +5,9 @@ import com.sdet.api.models.BookingDates;
 import com.sdet.api.models.BookingResponse;
 import io.restassured.module.jsv.JsonSchemaValidator;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.awt.print.Book;
 import io.qameta.allure.*;
 
 @Epic("API Testing")

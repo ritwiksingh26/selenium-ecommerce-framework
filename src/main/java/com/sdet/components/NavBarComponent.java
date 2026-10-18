@@ -18,6 +18,9 @@ public class NavBarComponent extends BasePage {
     @FindBy(xpath = "//a[contains(.,'Logged in as')]")
     private WebElement loggedInAsLabel;
 
+    @FindBy(css = "a[href='/products']")
+    private WebElement productsLink;
+
     public void clickSignupLogin(){
         click(signupLoginLink);
     }
@@ -36,5 +39,9 @@ public class NavBarComponent extends BasePage {
 
     public String getLoggedInUsername(){
         return getText(loggedInAsLabel).replace("Logged in as ","").trim();
+    }
+
+    public void clickProducts(){
+        click(productsLink);
     }
 }

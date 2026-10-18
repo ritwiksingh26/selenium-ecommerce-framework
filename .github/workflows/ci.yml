@@ -92,5 +92,3 @@ jobs:
         run: >
           mvn -B -DskipTests verify
           org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar
-
-  

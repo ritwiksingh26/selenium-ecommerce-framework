@@ -3,12 +3,9 @@ package com.sdet.base;
 import com.sdet.config.ConfigReader;
 import com.sdet.factory.BrowserFactory;
 import com.sdet.utils.LogUtil;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 

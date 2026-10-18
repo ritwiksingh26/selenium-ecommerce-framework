@@ -24,7 +24,13 @@ public class BasePage {
     protected void click(WebElement element){
         wait.until(ExpectedConditions.elementToBeClickable(element));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-        element.click();
+        try {
+            element.click();
+        } catch (ElementClickInterceptedException e) {
+            log.warn("Click intercepted (likely ad overlay) - retrying with JS click");
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+        }
+        
         log.debug("Clicked element: {}", element);
     }
 
