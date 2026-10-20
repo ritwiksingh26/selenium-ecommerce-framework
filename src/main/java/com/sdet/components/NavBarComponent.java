@@ -1,5 +1,6 @@
 package com.sdet.components;
 
+import com.sdet.config.ConfigReader;
 import com.sdet.pages.BasePage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -43,5 +44,13 @@ public class NavBarComponent extends BasePage {
 
     public void clickProducts(){
         click(productsLink);
+    }
+
+    public void goToProducts() {
+        clickAndWaitForUrl(productsLink, "products", ConfigReader.get("baseUrl") + "/products");
+    }
+
+    public void goToLogin() {
+        clickAndWaitForUrl(signupLoginLink, "login", ConfigReader.get("baseUrl") + "/login");
     }
 }

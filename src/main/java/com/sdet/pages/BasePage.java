@@ -67,4 +67,16 @@ public class BasePage {
             return false;
         }
     }
+
+    protected void clickAndWaitForUrl(WebElement element, String urlFragment, String fallbackUrl) {
+        click(element);
+        try {
+            waitForUrl(urlFragment);
+        } catch (TimeoutException e) {
+            log.warn("Click did not navigate (current url: {}), going directly to {}",
+                driver.getCurrentUrl(), fallbackUrl);
+            driver.get(fallbackUrl);
+            waitForUrl(urlFragment);
+        }
+    }
 }

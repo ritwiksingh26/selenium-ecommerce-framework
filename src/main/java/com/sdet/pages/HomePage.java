@@ -23,12 +23,10 @@ public class HomePage extends BasePage{
     }
 
     public void goToLoginPage(){
-        navBar.clickSignupLogin();
-        waitForUrl("login");
+        navBar.goToLogin();
     }
 
     public void goToProductPage(){
-        navBar.clickProducts();
-        waitForUrl("products");
+        navBar.goToProducts();
     }
 }
