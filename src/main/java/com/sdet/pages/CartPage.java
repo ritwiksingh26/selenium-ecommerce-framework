@@ -7,6 +7,8 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import com.sdet.config.ConfigReader;
+
 public class CartPage extends BasePage {
     
     private static final By ROWS = By.cssSelector("#cart_info_table tbody tr");
@@ -18,6 +20,12 @@ public class CartPage extends BasePage {
 
     @FindBy(id = "empty_cart")
     private WebElement emptyCartMessage;
+
+    @FindBy(css = ".check_out")
+    private WebElement proceedToCheckoutButton;
+
+    @FindBy(css = ".modal-content a[href='/login']")
+    private WebElement modalRegisterLoginLink;
 
     public int getItemCount(){
         return driver.findElements(ROWS).size();
@@ -51,6 +59,20 @@ public class CartPage extends BasePage {
     private int number(By rows, By cell, int row){
         String text = driver.findElements(rows).get(row).findElement(cell).getText();
         return Integer.parseInt(text.replaceAll("[^0-9]", ""));
+    }
+
+    //guestUser: opens the Register/Login modal
+    public void proceedToCheckout(){
+        click(proceedToCheckoutButton);
+    }
+
+    //logged in user:
+    public void proceedToCheckoutLoggedIn(){
+        clickAndWaitForUrl(proceedToCheckoutButton, "checkout", ConfigReader.get("baseUrl") + "/checkout");
+    }
+
+    public boolean isLoginPromptDisplayed(){
+        return isDisplayed(modalRegisterLoginLink);
     }
 
 }
