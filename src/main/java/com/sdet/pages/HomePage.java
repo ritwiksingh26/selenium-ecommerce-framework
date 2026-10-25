@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 
 public class HomePage extends BasePage{
 
-    NavBarComponent navBar = new NavBarComponent();
+    public NavBarComponent navBar = new NavBarComponent();
 
     @FindBy(css = "img[src='/static/images/home/logo.png']")
     private WebElement logo;

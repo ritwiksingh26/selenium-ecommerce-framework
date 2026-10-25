@@ -33,7 +33,7 @@ public class CartTest extends BaseTest{
     public void testAddSingleProduct(){
         String name = productsPage.getProductNames().get(0);
         productsPage.addToCart(0);
-        productsPage.cartMondal.viewCart();
+        productsPage.cartModal.viewCart();
 
         Assert.assertEquals(cartPage.getItemCount(), 1);
         Assert.assertEquals(cartPage.getProductNames().get(0), name);
@@ -45,11 +45,11 @@ public class CartTest extends BaseTest{
     public void testAddMultipleProducts(){
         List<String> names = productsPage.getProductNames();
         productsPage.addToCart(0);
-        productsPage.cartMondal.continueShopping();
+        productsPage.cartModal.continueShopping();
         productsPage.addToCart(4);
-        productsPage.cartMondal.continueShopping();
+        productsPage.cartModal.continueShopping();
         productsPage.addToCart(7);
-        productsPage.cartMondal.viewCart();
+        productsPage.cartModal.viewCart();
 
         Assert.assertEquals(cartPage.getItemCount(), 3);
         Assert.assertTrue(cartPage.getProductNames().containsAll(List.of(names.get(0), names.get(4), names.get(7))));
@@ -60,7 +60,7 @@ public class CartTest extends BaseTest{
         description = "TC-14: Remove product from cart")
     public void testRemoveProduct(){
         productsPage.addToCart(0);
-        productsPage.cartMondal.viewCart();
+        productsPage.cartModal.viewCart();
         cartPage.removeItem(0);
 
         Assert.assertTrue(cartPage.isCartEmpty(), "Cart should be empty after removal");
@@ -71,9 +71,9 @@ public class CartTest extends BaseTest{
         description = "TC-15: Verify cart totals")
     public void testCartTotal(){
         productsPage.addToCart(0);
-        productsPage.cartMondal.continueShopping();
+        productsPage.cartModal.continueShopping();
         productsPage.addToCart(3);
-        productsPage.cartMondal.viewCart();
+        productsPage.cartModal.viewCart();
 
         for( int row = 0; row < cartPage.getItemCount(); row++){
             Assert.assertEquals(cartPage.getTotal(row), cartPage.getPrice(row) * cartPage.getQuantity(row), "Row " + row + ": total should be equal price x quantity"); 

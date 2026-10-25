@@ -11,7 +11,7 @@ import com.sdet.components.CartModalComponent;
 
 public class ProductsPage extends BasePage{
 
-    public CartModalComponent cartMondal = new CartModalComponent();
+    public CartModalComponent cartModal = new CartModalComponent();
     
     @FindBy(id="search_product")
     private WebElement searchInput;
