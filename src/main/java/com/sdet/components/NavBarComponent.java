@@ -22,6 +22,9 @@ public class NavBarComponent extends BasePage {
     @FindBy(css = "a[href='/products']")
     private WebElement productsLink;
 
+    @FindBy(css = "a[href='/contact_us']")
+    private WebElement contactUsLink;
+
     public void clickSignupLogin(){
         click(signupLoginLink);
     }
@@ -53,4 +56,9 @@ public class NavBarComponent extends BasePage {
     public void goToLogin() {
         clickAndWaitForUrl(signupLoginLink, "login", ConfigReader.get("baseUrl") + "/login");
     }
+
+    public void goToContactUs() {
+    clickAndWaitForUrl(contactUsLink, "contact_us",
+        ConfigReader.get("baseUrl") + "/contact_us");
+}
 }
