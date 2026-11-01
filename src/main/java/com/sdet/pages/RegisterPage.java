@@ -6,6 +6,9 @@ import org.openqa.selenium.support.ui.Select;
 
 public class RegisterPage extends BasePage{
 
+    @FindBy(css = "a[data-qa='continue-button']")
+    private WebElement continueButton;
+
     @FindBy(css = "input#id_gender1")
     private WebElement mrRadioBtn;
 
@@ -109,6 +112,10 @@ public class RegisterPage extends BasePage{
         enterAddress(firstName, lastName, company, address, state, city, zipcode, mobile);
         selectCountry(country);
         clickCreateAccount();
+    }
+
+    public void clickContinue(){
+        click(continueButton);
     }
 
 }

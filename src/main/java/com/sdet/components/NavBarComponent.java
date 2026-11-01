@@ -2,10 +2,22 @@ package com.sdet.components;
 
 import com.sdet.config.ConfigReader;
 import com.sdet.pages.BasePage;
+
+import java.util.List;
+
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class NavBarComponent extends BasePage {
+
+    private static final By HEADER_LINKS = By.cssSelector(".shop-menu ul.nav li a");
+
+    public List<String> getHeaderLinkTexts() {
+        return driver.findElements(HEADER_LINKS).stream()
+                .map(e -> e.getText().trim().toLowerCase())
+                .toList();
+    }
 
     @FindBy(css = "a[href='/login']")
     private WebElement signupLoginLink;
