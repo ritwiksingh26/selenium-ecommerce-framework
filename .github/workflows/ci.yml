@@ -38,6 +38,23 @@ jobs:
           path: target/allure-results
           if-no-files-found: warn
 
+      - name: Upload Screenshots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: screenshots-${{ matrix.browser }}
+          path: test-output/screenshots/
+          if-no-files-found: ignore
+
+      - name: Upload Extent Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: extent-reports-${{ matrix.browser }}
+          path: test-output/reports/
+          if-no-files-found: warn
+
+
   allure-report:
     name: Generate Allure Report
     runs-on: ubuntu-latest
