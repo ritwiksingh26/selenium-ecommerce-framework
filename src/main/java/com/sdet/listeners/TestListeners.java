@@ -10,105 +10,71 @@ import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Arrays;
+
 
 public class TestListeners implements ITestListener {
 
     private static final Logger log = LogUtil.getLogger(TestListeners.class);
     private static ExtentReports extent;
-    private static final Map<String, ExtentTest> testMap = new ConcurrentHashMap<>();
+    private static final ThreadLocal<ExtentTest> currentTest = new ThreadLocal<>();
 
-
-    //Builds a unique key that works for both regular and data-driven tests
-    private static String getTestKey(ITestResult result){
-        String methodName = result.getMethod().getMethodName();
-        Object[] params = result.getParameters();
-        if (params != null && params.length > 0){
-            return methodName + "_" + result.getMethod().getCurrentInvocationCount();
-        }
-        return methodName;
-    }
     @Override
     public void onStart(ITestContext context) {
-        synchronized (TestListeners.class){
+        synchronized (TestListeners.class) {
             extent = ExtentManager.getInstance();
         }
-        log.info("==== Test Suite Started: {} ====", context.getName());
+        log.info("===== Test Suite Started: {} =====", context.getName());
     }
 
     @Override
-    public void onTestStart(ITestResult result){
-        String testKey = getTestKey(result);
-
-        // For data-driven tests, append parameter summary to the display name
+    public void onTestStart(ITestResult result) {
         String displayName = result.getMethod().getMethodName();
         Object[] params = result.getParameters();
-        if (params != null && params.length > 0){
-            displayName += " " + java.util.Arrays.toString(params);
+        if (params != null && params.length > 0) {
+            displayName += " " + Arrays.toString(params);
         }
-        ExtentTest extentTest = extent.createTest(displayName, result.getMethod().getDescription());
-        testMap.put(testKey, extentTest);
-        log.info("Test started: {}", testKey);
+        currentTest.set(extent.createTest(displayName, result.getMethod().getDescription()));
+        log.info("Test started: {}", displayName);
     }
 
     @Override
-    public void onTestSuccess(ITestResult result){
-        String testKey = getTestKey(result);
-        ExtentTest extentTest = testMap.get(testKey);
-        if (extentTest != null){
-            extentTest.log(Status.PASS, "Test passed");
-        }
-        log.info("Test PASSED: {}", testKey);
+    public void onTestSuccess(ITestResult result) {
+        log("PASS", Status.PASS, "Test passed", result);
     }
 
     @Override
-    public void onTestFailure(ITestResult result){
-        String testKey = getTestKey(result);
-        ExtentTest extentTest = testMap.get(testKey);
-
-        if (extentTest != null){
-            extentTest.log(Status.FAIL, "Test failed: " + result.getThrowable());
-        } else {
-            log.error("ExtentTest instance not found for key: {} - screenshot skipped", testKey);
-        }
+    public void onTestFailure(ITestResult result) {
+        log("FAIL", Status.FAIL, "Test failed: " + result.getThrowable(), result);
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        String testKey = getTestKey(result);
-        ExtentTest extentTest = testMap.get(testKey);
-        if (extentTest != null){
-            extentTest.log(Status.SKIP, "Test skipped");
-        }
-        log.warn("Test SKIPPED: {}", testKey);
+        log("SKIP", Status.SKIP, "Test skipped", result);
     }
 
     @Override
-    public void onFinish(ITestContext context){
+    public void onFinish(ITestContext context) {
         extent.flush();
-        log.info("==== Test Suite Finished: {} ====", context.getName());
+        log.info("===== Test Suite Finished: {} =====", context.getName());
     }
 
-    public static void attachScreenshot(ITestResult result, String screenshotPath){
-        if (screenshotPath == null || screenshotPath.isEmpty()) {
-            log.warn("Screenshot path empty - skipping attachment");
+    // Called from BaseTest.tearDown while the browser is still open
+    public static void attachScreenshot(ITestResult result, String screenshotPath) {
+        ExtentTest test = currentTest.get();
+        if (test == null || screenshotPath == null || screenshotPath.isEmpty()) {
+            log.warn("Screenshot not attached for: {}", result.getName());
             return;
         }
+        test.addScreenCaptureFromPath("../screenshots/"
+            + screenshotPath.substring(screenshotPath.lastIndexOf('/') + 1));
+    }
 
-        String testKey = getTestKey(result);
-        ExtentTest extentTest = testMap.get(testKey);
-
-        if (extentTest != null) {
-            try{
-                extentTest.addScreenCaptureFromPath("../screenshots/" + screenshotPath.substring(screenshotPath.lastIndexOf("/") + 1));
-                extentTest.log(Status.FAIL, "Screenshot captured on failure");
-            log.info("Screenshot attached for: {}", testKey);
-            } catch (Exception e) {
-                log.error("Failed to attach screenshot for: {} — {}", testKey, e.getMessage());
-            }
-        } else {
-            log.warn("ExtentTest not found for key: {} — screenshot not attached", testKey);
+    private void log(String label, Status status, String message, ITestResult result) {
+        ExtentTest test = currentTest.get();
+        if (test != null) {
+            test.log(status, message);
         }
+        log.info("Test {}: {}", label, result.getName());
     }   
 }

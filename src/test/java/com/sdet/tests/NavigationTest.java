@@ -23,8 +23,9 @@ public class NavigationTest extends BaseTest {
     @Test(groups = {TestGroups.SMOKE, TestGroups.REGRESSION},
           description = "TC-21: Navigate to Products and back to Home")
     public void testHomePageNavigation() {
-        homePage.goToProductPage();                       // your own method name if it differs
+        homePage.goToProductPage();                       
         homePage.navBar.clickHome();
+        homePage.waitUntilOnHome();
 
         Assert.assertTrue(homePage.isCarouselDisplayed(),
             "Home page carousel should be visible after navigating back");
