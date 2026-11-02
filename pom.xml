@@ -22,8 +22,10 @@
       <sonar.projectKey>ritwiksingh26_selenium-ecommerce-framework</sonar.projectKey>
       <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
+      <!-- Defaults, overridden by profiles or -D flags -->
       <env>dev</env>
       <browser>chrome</browser>
+      <suite>smoke.xml</suite>
   </properties>
 
   <dependencies>
@@ -94,19 +96,18 @@
       </dependency>
 
       <dependency>
-            <groupId>io.qameta.allure</groupId>
-            <artifactId>allure-testng</artifactId>
-            <version>${allure.version}</version>
+          <groupId>io.qameta.allure</groupId>
+          <artifactId>allure-testng</artifactId>
+          <version>${allure.version}</version>
       </dependency>
-      
+
       <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>${aspectj.version}</version>
+          <groupId>org.aspectj</groupId>
+          <artifactId>aspectjweaver</artifactId>
+          <version>${aspectj.version}</version>
       </dependency>
   </dependencies>
 
-  <!-- Project level build — default suite runs smoke -->
   <build>
       <resources>
           <resource>
@@ -117,72 +118,49 @@
               </includes>
           </resource>
       </resources>
-      <plugins>
 
-        <plugin>
-            <groupId>org.sonarsource.scanner.maven</groupId>
-            <artifactId>sonar-maven-plugin</artifactId>
-            <version>3.11.0.3922</version>
-        </plugin>
+      <plugins>
           <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-surefire-plugin</artifactId>
               <version>3.2.5</version>
               <configuration>
-                <argLine>
-                    -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
-                </argLine>
+                  <argLine>
+                      -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                  </argLine>
                   <suiteXmlFiles>
-                      <suiteXmlFile>
-                          src/test/resources/suites/smoke.xml
-                      </suiteXmlFile>
+                      <suiteXmlFile>src/test/resources/suites/${suite}</suiteXmlFile>
                   </suiteXmlFiles>
                   <systemPropertyVariables>
                       <browser>${browser}</browser>
                       <env>${env}</env>
                       <log4j2.configurationFile>log4j2.xml</log4j2.configurationFile>
-                      <!-- Allure results directory -->
-                        <allure.results.directory>
-                            ${project.build.directory}/allure-results
-                        </allure.results.directory>
+                      <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
                   </systemPropertyVariables>
-                  <!-- Register Allure listener -->
-                    <properties>
-                        <property>
-                            <name>listener</name>
-                            <value>io.qameta.allure.testng.AllureTestNg</value>
-                        </property>
-                    </properties>
               </configuration>
           </plugin>
 
           <plugin>
-                <groupId>io.qameta.allure</groupId>
-                <artifactId>allure-maven</artifactId>
-                <version>2.12.0</version>
-                <configuration>
-                    <reportVersion>2.27.0</reportVersion>
-                    <resultsDirectory>
-                        ${project.build.directory}/allure-results
-                    </resultsDirectory>
-                </configuration>
+              <groupId>io.qameta.allure</groupId>
+              <artifactId>allure-maven</artifactId>
+              <version>2.12.0</version>
+              <configuration>
+                  <reportVersion>${allure.version}</reportVersion>
+                  <resultsDirectory>${project.build.directory}/allure-results</resultsDirectory>
+              </configuration>
+          </plugin>
+
+          <plugin>
+              <groupId>org.sonarsource.scanner.maven</groupId>
+              <artifactId>sonar-maven-plugin</artifactId>
+              <version>3.11.0.3922</version>
           </plugin>
       </plugins>
   </build>
 
-  <!-- All profiles wrapped inside <profiles> tag -->
   <profiles>
 
-      <profile>
-          <id>chrome</id>
-          <activation>
-              <activeByDefault>true</activeByDefault>
-          </activation>
-          <properties>
-              <browser>chrome</browser>
-          </properties>
-      </profile>
-
+      <!-- Browser profiles -->
       <profile>
           <id>firefox</id>
           <properties>
@@ -197,134 +175,63 @@
           </properties>
       </profile>
 
+      <!-- Suite profiles: each one only picks the suite file -->
       <profile>
           <id>smoke</id>
-          <build>
-              <plugins>
-                  <plugin>
-                      <groupId>org.apache.maven.plugins</groupId>
-                      <artifactId>maven-surefire-plugin</artifactId>
-                      <version>3.2.5</version>
-                      <configuration>
-                          <suiteXmlFiles>
-                              <suiteXmlFile>
-                                  src/test/resources/suites/smoke.xml
-                              </suiteXmlFile>
-                          </suiteXmlFiles>
-                          <systemPropertyVariables>
-                              <browser>${browser}</browser>
-                              <env>${env}</env>
-                          </systemPropertyVariables>
-                      </configuration>
-                  </plugin>
-              </plugins>
-          </build>
+          <properties>
+              <suite>smoke.xml</suite>
+          </properties>
       </profile>
 
-      <!-- Sequential regression — local use -->
+      <profile>
+          <id>sanity</id>
+          <properties>
+              <suite>sanity.xml</suite>
+          </properties>
+      </profile>
+
+      <!-- Sequential regression: local use -->
       <profile>
           <id>regression</id>
-          <build>
-              <plugins>
-                  <plugin>
-                      <groupId>org.apache.maven.plugins</groupId>
-                      <artifactId>maven-surefire-plugin</artifactId>
-                      <version>3.2.5</version>
-                      <configuration>
-                          <suiteXmlFiles>
-                              <suiteXmlFile>
-                                  src/test/resources/suites/regression.xml
-                              </suiteXmlFile>
-                          </suiteXmlFiles>
-                          <systemPropertyVariables>
-                              <browser>${browser}</browser>
-                              <env>${env}</env>
-                          </systemPropertyVariables>
-                      </configuration>
-                  </plugin>
-              </plugins>
-          </build>
+          <properties>
+              <suite>regression.xml</suite>
+          </properties>
       </profile>
 
-      <!-- Parallel regression — CI use -->
+      <!-- Parallel regression: CI use -->
       <profile>
           <id>regression-parallel</id>
-          <build>
-              <plugins>
-                  <plugin>
-                      <groupId>org.apache.maven.plugins</groupId>
-                      <artifactId>maven-surefire-plugin</artifactId>
-                      <version>3.2.5</version>
-                      <configuration>
-                          <suiteXmlFiles>
-                              <suiteXmlFile>
-                                  src/test/resources/suites/regression-parallel.xml
-                              </suiteXmlFile>
-                          </suiteXmlFiles>
-                          <systemPropertyVariables>
-                              <browser>${browser}</browser>
-                              <env>${env}</env>
-                          </systemPropertyVariables>
-                      </configuration>
-                  </plugin>
-              </plugins>
-          </build>
+          <properties>
+              <suite>regression-parallel.xml</suite>
+          </properties>
       </profile>
 
       <profile>
           <id>api</id>
-          <build>
-              <plugins>
-                  <plugin>
-                      <groupId>org.apache.maven.plugins</groupId>
-                      <artifactId>maven-surefire-plugin</artifactId>
-                      <version>3.2.5</version>
-                      <configuration>
-                          <suiteXmlFiles>
-                              <suiteXmlFile>
-                                  src/test/resources/suites/api.xml
-                              </suiteXmlFile>
-                          </suiteXmlFiles>
-                      </configuration>
-                  </plugin>
-              </plugins>
-          </build>
+          <properties>
+              <suite>api.xml</suite>
+          </properties>
       </profile>
 
       <profile>
           <id>cross-browser</id>
-          <build>
-              <plugins>
-                  <plugin>
-                      <groupId>org.apache.maven.plugins</groupId>
-                      <artifactId>maven-surefire-plugin</artifactId>
-                      <version>3.2.5</version>
-                      <configuration>
-                          <suiteXmlFiles>
-                              <suiteXmlFile>
-                                  src/test/resources/suites/cross-browser.xml
-                              </suiteXmlFile>
-                          </suiteXmlFiles>
-                      </configuration>
-                  </plugin>
-              </plugins>
-          </build>
+          <properties>
+              <suite>cross-browser.xml</suite>
+          </properties>
       </profile>
 
+      <!-- Selenium Grid: adds extra system properties on top of the base config -->
       <profile>
           <id>grid</id>
+          <properties>
+              <suite>cross-browser.xml</suite>
+          </properties>
           <build>
               <plugins>
                   <plugin>
                       <groupId>org.apache.maven.plugins</groupId>
                       <artifactId>maven-surefire-plugin</artifactId>
-                      <version>3.2.5</version>
                       <configuration>
-                          <suiteXmlFiles>
-                              <suiteXmlFile>
-                                  src/test/resources/suites/cross-browser.xml
-                              </suiteXmlFile>
-                          </suiteXmlFiles>
                           <systemPropertyVariables>
                               <useGrid>true</useGrid>
                               <gridUrl>http://localhost:4444/wd/hub</gridUrl>
@@ -334,28 +241,6 @@
               </plugins>
           </build>
       </profile>
-
-      <profile>
-            <id>sanity</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>3.2.5</version>
-                        <configuration>
-                            <suiteXmlFiles>
-                                <suiteXmlFile>src/test/resources/suites/sanity.xml</suiteXmlFile>
-                            </suiteXmlFiles>
-                            <systemPropertyVariables>
-                                <browser>${browser}</browser>
-                                <env>${env}</env>
-                            </systemPropertyVariables>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
 
   </profiles>
 
