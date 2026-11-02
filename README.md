@@ -89,7 +89,13 @@ then promoted to `main`. Both `dev` and `main` are protected.
 
 ## Reports
 
-<screenshots of the Extent report, the Allure report, the GitHub Actions run and the Jenkins build>
+| Extent | Allure |
+|---|---|
+| ![Extent](docs/screenshots/extent-report.png) | ![Allure](docs/screenshots/allure-overview.png) |
+
+| GitHub Actions | Jenkins | SonarCloud |
+|---|---|---|
+| ![Actions](docs/screenshots/github-actions.png) | ![Jenkins](docs/screenshots/jenkins-build.png) | ![Sonar](docs/screenshots/sonarcloud.png) |
 
 ## Known limitations
 
